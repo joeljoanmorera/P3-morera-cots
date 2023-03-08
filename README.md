@@ -158,11 +158,12 @@ El **diagrama de flujo** es:
         MG1([Libera LED]) --> D1([Delay de 500 ms])
     end
     
-    id1 & id2 --> LED([LED])
-
+    id1 & id2 --> MUX
+    MUX {MUPLEX} ==> LED([LED])
+    
     subgraph id2 [Tarea 2: LED OFF]
         MT2([Accede a LED]) --> LOFF
-        LOFF([Enciende LED]) --> P1
+        LOFF([Enciende LED]) --> P2
         P2([Imprime por pantalla 'LED state: OFF']) --> MG2
         MG2([Libera LED]) --> D2([Delay de 500 ms])
     end
