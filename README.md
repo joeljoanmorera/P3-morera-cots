@@ -12,13 +12,42 @@ posible demora.
 
 ## Ejercicio práctico 1 
 
-El funcionamento de este programa consiste en
+El funcionamento de este programa consiste en la ejecución de dos tareas que imprimen por pantalla un mensaje. 
 
-EL **código** es el siguiente:
+Por una parte, se ejecuta el codigo principal `loop` que imprime por pantalla 'this is ESP32 Task'.
+
+A su vez, se ejecuta la tarea `anotherTask` que imprime por pantalla 'this is another Task'.
+
+Ambas tareas se ejecutan a la vez, como ya hemos comentado, por lo que en el puerto serie aparecen ambos mensajes simultaneamente:
+
+```bash
+this is ESP32 Task
+this is another Task
+this is ESP32 Task
+this is another Task
+this is ESP32 Task
+this is another Task
+...
+```
+
+El **código** es el siguiente:
 
 ```cpp
 #include <Arduino.h>
 
+/* this function will be invoked when additionalTask was created */
+void anotherTask( void * parameter )
+{
+    /* loop forever */
+    for(;;)
+    {
+        Serial.println("this is another Task");
+        delay(1000);
+    }
+    /* delete a task when finish,
+    this will never happen because this is infinity loop */
+    vTaskDelete( NULL );
+}
 void setup()
 {
     Serial.begin(112500);
@@ -37,20 +66,6 @@ void loop()
 {
     Serial.println("this is ESP32 Task");
     delay(1000);
-}
-
-/* this function will be invoked when additionalTask was created */
-void anotherTask( void * parameter )
-{
-    /* loop forever */
-    for(;;)
-    {
-        Serial.println("this is another Task");
-        delay(1000);
-    }
-    /* delete a task when finish,
-    this will never happen because this is infinity loop */
-    vTaskDelete( NULL );
 }
 ```
 
@@ -83,20 +98,44 @@ Con tal de que ambas tareas esten sincronizadas se hace uso de semaforos, en con
 
 De manera resumida mientras una tarea este accediendo al recurso se manda una señal de espera a la otra tarea, denegando el acceso. Cuando la primera tarea termine se libera el recurso y permite a la otra tarea acceder a él. 
 
-Por ulimo, cabe comentar que, además, se ha añadido un 'delay' de 500 ms entre encendido y apagado.
+Por ulimo, cabe comentar que, además, se ha añadido un 'delay' de 2000 ms entre encendido y apagado.
 
-EL **código** es el siguiente:
+El **código** es el siguiente:
 
 ```cpp
 #include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <semphr.h>
 
 //Creation of semaphore
 SemaphoreHandle_t mutex;
 
 //Other variables
 int LED = 23;
+
+//Code from the task that sets the LED on.
+void TaskSetLedON (void *pvParameters)
+{
+	for(;;)
+	{	
+		xSemaphoreTake(mutex, portMAX_DELAY);
+		digitalWrite(LED, HIGH);
+		Serial.println("LED state: ON");	
+		xSemaphoreGive(mutex);
+		vTaskDelay(pdMS_TO_TICKS(2000));
+	}
+}
+
+//Code from the task that sets the LED off.
+void TaskSetLedOFF (void *pvParameters)
+{
+	for(;;)
+	{		
+		xSemaphoreTake(mutex, portMAX_DELAY);	
+		digitalWrite(LED, LOW);
+		Serial.println("LED state: OFF");
+		xSemaphoreGive(mutex);	
+		vTaskDelay(pdMS_TO_TICKS(2000));
+	}
+}
 
 //Codigo que solo se ejecuta una vez
 void setup()
@@ -108,8 +147,8 @@ void setup()
 	pinMode(LED,OUTPUT);
 	
 	// Tasks creation
-	xTaskCreateTaskSetLedON, "LED_ON", 10000, NULL, 0, NULL);
-	xTaskCreateTaskSetLedOFF, "LED_OFF", 10000, NULL, 0, NULL);
+	xTaskCreate(TaskSetLedON, "LED_ON", 10000, NULL, 0, NULL);
+	xTaskCreate(TaskSetLedOFF, "LED_OFF", 10000, NULL, 0, NULL);
 	
 	//Semaphore creation
 	mutex = xSemaphoreCreateMutex();
@@ -119,31 +158,6 @@ void setup()
 //Codigo que se ejeucta multiples veces
 void loop() {}
 
-//Code from the task that sets the LED on.
-void TaskSetLedON (void *pvParameters)
-{
-	for(;;)
-	{	
-		xSemaphoreTake(mutex, portMAX_DELAY);
-		digitalWrtie(LED, HIGH);
-		Serial.println("LED state: ON");	
-		xSemaphoreGive(mutex);
-		vTaskDelay(pdMS_TO_TICKS(500));
-	}
-}
-
-//Code from the task that sets the LED off.
-void TaskSetLedOFF (void *pvParameters)
-{
-	for(;;)
-	{		
-		xSemaphoreTake(mutex, portMAX_DELAY);	
-		digitalWrtie(LED, LOW);
-		Serial.println("LED state: OFF");
-		xSemaphoreGive(mutex);	
-		vTaskDelay(pdMS_TO_TICKS(500));
-	}
-}
 ```
 
 El **diagrama de flujo** es:
@@ -167,6 +181,17 @@ El **diagrama de flujo** es:
         P2([Imprime por pantalla 'LED state: OFF']) --> MG2
         MG2([Libera LED]) --> D2([Delay de 500 ms])
     end
+```
+
+La salida que se obtiene por el puerto serie:
+```bash
+LED state: ON
+LED state: OFF
+LED state: ON
+LED state: OFF
+LED state: ON
+LED state: OFF
+...
 ```
 ## Ejercicio práctico complementario
 
