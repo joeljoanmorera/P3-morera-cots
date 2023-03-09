@@ -199,7 +199,7 @@ El siguiente programa realiza efectos visuales con 4 LEDS.
 
 El **código** es el siguiente:
 ```cpp
-
 ```
 
 El **diagrama de flujo** es:
+
