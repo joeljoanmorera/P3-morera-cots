@@ -201,6 +201,25 @@ La gestión de los pulsadores y el efecto de los LEDs se controla mediante un 't
 
 El efecto de los LEDs se realiza mediante una máscara, que contiene el efecto que realizaran los LEDs y se multiplica con el estado de cada LED. Finalmente, se desplazan una posición los bits de la máscara.
 
+Por otra parte, se realiza el procesado de ordenes dentro del bucle principal. Cuando la variable `orden` de la estructura `Button` esta a valor alto en alguno de los pulsadores acitva las ordenes correspondientes de cada pulsador.
+
+En caso que se quiera bajar la velocidad se aumenta la variable contador, que aparece como `cont` y como `conti`, siendo este su valor inicial. Decrementar la variable sera, por lo tanto, aumentar la velocidad. Por lo que el contador es el retraso que hay entre cada iteración en el efecto de los LEDs.
+
+Por último, el control de efectos se realiza alternando entre los valores posibles de `effectOrder`, esta variable sirve como indice para la funcion `maskType`, donde aparecen para cada uno de los posibles efectos un tipo de màscara. Siendo los valores posibles: `00000001`, `00010001`, `01010101`, `00000101`.
+
+De los requesitos operativos del programa los que se cumplen son:
+
+- [x] El programa de gestion de lectura y efectos se basa en una interrupción del timer.
+- [x] La gestion de pulsadores dispone de un ﬁltrado en tiempo real de rebotes y lanza las
+ordenes de ejecucion en los ﬂancos de bajada. Estas ordenes se ejecutan por el programa de
+procesado de ordene.
+- [ ] El programa se separara en 2 zonas una de lectura de pulsadores y de gestion de efectos de leds ,
+esta se realizara en un core y Otra donde se realizara el procesado de las ordenes que se realizara en
+un segundo core .
+- [ ] Los efectos luminosos de los leds se deben guardar en una estructura donde se pueda indicar las
+diferentes activaciones relativas entre cada led y por tanto las modiﬁcaciones entre animaciones se
+realizaran recorriendo una tabla de punteros a estructuras.
+
 El **código** es el siguiente:
 
 ```cpp
@@ -412,7 +431,7 @@ void IRAM_ATTR buttonManagement()
 El **diagrama de flujo** es:
 
 ```mermaid
-    flowchart TD;
+    flowchart TB;
     I([Inicio del programa]) ==> loop & timer;
 
     subgraph timer [Timer]
