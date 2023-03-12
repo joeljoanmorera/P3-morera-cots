@@ -207,7 +207,7 @@ En caso que se quiera bajar la velocidad se aumenta la variable contador, que ap
 
 En el siguiente GIF podemos ver el cambio de velocidad cuando unos de los botones se pulsa:
 
-!["Cambio de velocidad"](https://github.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0591.mov)
+!["Cambio de velocidad"](https://raw.githubusercontent.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0591.mov)
 
 Por último, el control de efectos se realiza alternando entre los valores posibles de `effectOrder`, esta variable sirve como indice para la funcion `maskType`, donde aparecen para cada uno de los posibles efectos el modo que les pertoca. Siendo los modos estos:
 
@@ -224,7 +224,7 @@ Por último, el control de efectos se realiza alternando entre los valores posib
 
 En el siguiente GIF podemos ver el cambio de modos:
 
-!["Cambio de modos"](https://github.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0590.mov)
+!["Cambio de modos"](https://raw.githubusercontent.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0590.mov)
 
 De los requesitos operativos del programa los que se cumplen son:
 
