@@ -205,10 +205,6 @@ Por otra parte, se realiza el procesado de ordenes dentro del bucle principal. C
 
 En caso que se quiera bajar la velocidad se aumenta la variable contador, que aparece como `cont` y como `conti`, siendo este su valor inicial. Decrementar la variable sera, por lo tanto, aumentar la velocidad. Por lo que el contador es el retraso que hay entre cada iteración en el efecto de los LEDs.
 
-En el siguiente GIF podemos ver el cambio de velocidad cuando unos de los botones se pulsa:
-
-!["Cambio de velocidad"](https://raw.githubusercontent.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0591.mov)
-
 Por último, el control de efectos se realiza alternando entre los valores posibles de `effectOrder`, esta variable sirve como indice para la funcion `maskType`, donde aparecen para cada uno de los posibles efectos el modo que les pertoca. Siendo los modos estos:
 
 | LED | Modo 1 | Modo 2 | Modo 3 | Modo 4 | Modo 5 | Modo 6 | Modo 7 |
@@ -222,10 +218,6 @@ Por último, el control de efectos se realiza alternando entre los valores posib
 | LED 7 | 0b01000000  |  0b00000010  |  0b01010000  |  0b01010101  |  0b00100010  |  0b01000100  |  0b00110011 |
 | LED 8 | 0b10000000  |  0b00000001  |  0b10100000  |  0b10101010  |  0b00010001  |  0b10001000  |  0b00010001 |
 
-En el siguiente GIF podemos ver el cambio de modos:
-
-!["Cambio de modos"](https://raw.githubusercontent.com/joeljoanmorera/P3-morera-cots/blob/main/images/IMG_0590.mov)
-
 De los requesitos operativos del programa los que se cumplen son:
 
 - [x] El programa de gestion de lectura y efectos se basa en una interrupción del timer.
@@ -233,6 +225,8 @@ De los requesitos operativos del programa los que se cumplen son:
 - [ ] El programa se separara en 2 zonas, una de lectura de pulsadores y de gestion de efectos de leds, esta se realiza en un core; y otra en que se realiza el procesado de las ordenes, en un segundo core.
 - [x] Los efectos luminosos de los leds se deben guardar en una estructura donde se pueda indicar las diferentes activaciones relativas entre cada led.
 - [ ] Las modiﬁcaciones entre animaciones se realizaran recorriendo una tabla de punteros a estructuras.
+
+(Se pueden encontrar videos del funcionamento en harware del programa en la carpeta `/images`).
 
 El **código** es el siguiente:
 
