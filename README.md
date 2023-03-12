@@ -226,7 +226,7 @@ De los requesitos operativos del programa los que se cumplen son:
 - [x] Los efectos luminosos de los leds se deben guardar en una estructura donde se pueda indicar las diferentes activaciones relativas entre cada led.
 - [ ] Las modiﬁcaciones entre animaciones se realizaran recorriendo una tabla de punteros a estructuras.
 
-(Se pueden encontrar videos del funcionamento en harware del programa en la carpeta `/images`).
+(Se pueden encontrar videos del funcionamento en hardware del programa en la carpeta `/images`).
 
 El **código** es el siguiente:
 
